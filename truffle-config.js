@@ -8,30 +8,27 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 7545,
-      network_id: "*",
+      port: 4444,  // RSK node RPC port
+      network_id: "*"
     },
-    sepolia: {
-      provider: function() {
-        return new HDWalletProvider(
-          privateKeys.split(','),
-          `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`
-        )
-      },
-      gas: 3000000, // Reduced from 4,000,000 to 3,000,000
-      gasPrice: 1000000000, // Reduced from 2 Gwei to 1 Gwei
-      network_id: 11155111,
-      skipDryRun: true // Add this line to skip the dry run
+    rsktestnet: {
+      provider: () => new HDWalletProvider(process.env.PRIVATE_KEYS.split(','), `https://public-node.testnet.rsk.co`),
+      network_id: 31,
+      gas: 6800000,
+      gasPrice: 20000000000, // 20 gwei
+    },
+    rskmainnet: {
+      provider: () => new HDWalletProvider(process.env.PRIVATE_KEYS.split(','), `https://public-node.rsk.co`),
+      network_id: 30,
+      gas: 6800000,
+      gasPrice: 20000000000, // 20 gwei
     }
   },
   contracts_directory: './src/contracts/',
   contracts_build_directory: './src/abis/',
   compilers: {
     solc: {
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
+      version: "0.5.2",
     }
   }
 }
